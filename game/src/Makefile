@@ -3,6 +3,7 @@ PLATFORM = $(shell file /bin/ls | cut -d' ' -f3 | cut -d'-' -f1)
 GCC_VERSION = $(shell $(CC) --version 2>&1 | grep "(GCC)" | cut -d' ' -f3  | cut -d'.' -f1)
 BSD_VERSION = $(shell uname -v 2>&1 | cut -d' ' -f2 | cut -d'.' -f1)
 SVN_VERSION = 40250
+ENABLE_OLDHACKSHIELD = 0
 
 CC = clang++-devel
 
@@ -10,7 +11,7 @@ INCDIR =
 LIBDIR =
 BINDIR = ..
 OBJDIR = OBJDIR
-GAMEDIR = /usr/metin2/server/share/bin
+GAMEDIR = /main/server/share/bin
 $(shell if [ ! -d $(OBJDIR) ]; then mkdir $(OBJDIR); fi)
 
 # Standard Setting
@@ -43,10 +44,12 @@ INCDIR += -I../../../Extern/include
 LIBDIR += -L../../../Extern/lib
 LIBS += -lcryptopp -lgtest
 
+ifeq ($(ENABLE_OLDHACKSHIELD), 1)
 # HackShield
 INCDIR += -I../../libhackshield/include
 LIBDIR += -L../../libhackshield/lib
 LIBS += -lanticpxsvr
+endif
 
 # openssl
 #INCDIR += -I/usr/include
@@ -92,12 +95,17 @@ CPPFILE = BattleArena.cpp FSM.cpp MarkConvert.cpp MarkImage.cpp MarkManager.cpp 
 		  skill.cpp start_position.cpp target.cpp text_file_loader.cpp trigger.cpp utils.cpp vector.cpp war_map.cpp\
 		  wedding.cpp xmas_event.cpp version.cpp panama.cpp threeway_war.cpp map_location.cpp auth_brazil.cpp\
 		  BlueDragon.cpp BlueDragon_Binder.cpp DragonLair.cpp questlua_dragonlair.cpp\
-		  HackShield.cpp HackShield_Impl.cpp char_hackshield.cpp skill_power.cpp affect.cpp\
+		  skill_power.cpp affect.cpp\
 		  SpeedServer.cpp questlua_speedserver.cpp \
 		  auction_manager.cpp FileMonitor_FreeBSD.cpp ClientPackageCryptInfo.cpp cipher.cpp\
 		  buff_on_attributes.cpp check_server.cpp dragon_soul_table.cpp DragonSoul.cpp\
 		  group_text_parse_tree.cpp char_dragonsoul.cpp questlua_dragonsoul.cpp\
 		  shop_manager.cpp shopEx.cpp item_manager_read_tables.cpp
+		  
+		  
+ifeq ($(ENABLE_OLDHACKSHIELD), 1)
+CPPFILE += HackShield.cpp HackShield_Impl.cpp char_hackshield.cpp
+endif
 
 
 COBJS	= $(CFILE:%.c=$(OBJDIR)/%.o)
