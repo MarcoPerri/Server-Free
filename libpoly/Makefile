@@ -2,8 +2,15 @@ CXX	= clang++-devel
 BIN = ./libpoly.a
 
 GCC_VERSION = $(shell $(CC) --version 2>&1 | grep "(GCC)" | cut -d' ' -f3  | cut -d'.' -f1)
+USING_VCPKG = 1
 
 CFLAGS  = -Wall -O2 -pipe -mtune=i686 -D_GLIBCXX_USE_CXX11_ABI=1 -fno-exceptions -fno-rtti
+
+ifeq ($(USING_VCPKG), 1)
+CFLAGS += -m32
+VCPKG_DIR = /main/vcpkg
+IFLAGS = -I$(VCPKG_DIR)/installed/x86-freebsd/include
+endif
 
 LIBS =
 

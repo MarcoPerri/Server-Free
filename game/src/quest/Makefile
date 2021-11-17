@@ -3,6 +3,14 @@ CPPFLAGS=-g
 INCLUDEDIR=../../../liblua/include
 LIBDIR=../../../liblua/lib
 LIBS=-llua -llualib
+USING_VCPKG = 1
+
+ifeq ($(USING_VCPKG), 1)
+CPPFLAGS += -m32
+CPP += -static
+LIBDIR += -L/usr/local/lib/gcc10
+endif
+
 all: qc
 
 qc: qc.cc qc.o crc32.o

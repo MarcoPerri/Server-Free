@@ -4,6 +4,7 @@ GCC_VERSION = $(shell $(CC) --version 2>&1 | grep "(GCC)" | cut -d' ' -f3  | cut
 BSD_VERSION = $(shell uname -v 2>&1 | cut -d' ' -f2 | cut -d'.' -f1)
 SVN_VERSION = 40250
 ENABLE_OLDHACKSHIELD = 0
+USING_VCPKG = 1
 
 CC = clang++-devel
 
@@ -20,6 +21,7 @@ LIBS = -pthread -lm -lmd
 CFLAGS = -g -Wall -w -O2 -m32 -pipe -std=c++2a -fexceptions -D_THREAD_SAFE -DNDEBUG # -D_USE_SERVER_KEY_
 CFLAGS += -mtune=i686 -fstack-protector-all
 
+ifeq ($(USING_VCPKG), 0)
 # boost
 INCDIR += -I../../../Extern/include/boost
 
@@ -56,12 +58,14 @@ endif
 #LIBS += -lssl
 #LIBS += /usr/lib/libssl.a
 
+INCDIR += -I/usr/local/include
+LIBDIR += -L/usr/local/lib
+endif
+
 # Project Library
 INCDIR += -I../../liblua/include
-INCDIR += -I/usr/local/include
 INCDIR += -I../../libserverkey
 LIBDIR += -L../../libthecore/lib -L../../libpoly -L../../libsql -L../../libgame/lib -L../../liblua/lib -L../../libserverkey
-LIBDIR += -L/usr/local/lib
 LIBS += -lthecore -lpoly -llua -llualib -lsql -lgame -lserverkey
 USE_STACKTRACE = 0
 ifeq ($(USE_STACKTRACE), 1)
@@ -71,7 +75,20 @@ endif
 # TARGET  = $(BINDIR)/game_r$(SVN_VERSION)_$(PLATFORM)
 TARGET  = $(BINDIR)/game
 
+ifeq ($(USING_VCPKG), 1)
+CFLAGS += -static
+VCPKG_ROOT= /main/vcpkg
+INCDIR += -I$(VCPKG_ROOT)/installed/x86-freebsd/include
+LIBDIR += -L$(VCPKG_ROOT)/m2pkg/installed/x86-freebsd/lib
+LIBDIR += -L/usr/local/lib/gcc10
+LIBS += -lmariadbclient -lcryptopp -lIL -lpng -ljpeg -lssl -lcrypto
+endif
+
 CFILE	= minilzo.c
+
+ifeq ($(USING_VCPKG), 1)
+CFILE += sha1.c
+endif
 
 CPPFILE = BattleArena.cpp FSM.cpp MarkConvert.cpp MarkImage.cpp MarkManager.cpp OXEvent.cpp TrafficProfiler.cpp ani.cpp\
 		  arena.cpp banword.cpp battle.cpp blend_item.cpp block_country.cpp buffer_manager.cpp building.cpp castle.cpp\

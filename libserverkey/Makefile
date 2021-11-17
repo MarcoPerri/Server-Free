@@ -6,6 +6,7 @@ PLATFORM = $(shell file /bin/ls | cut -d' ' -f3 | cut -d'-' -f1)
 GCC_VERSION = $(shell $(CC) --version 2>&1 | grep "(GCC)" | cut -d' ' -f3  | cut -d'.' -f1)
 BSD_VERSION = $(shell uname -v 2>&1 | cut -d' ' -f2 | cut -d'.' -f1)
 SVN_VERSION = $(shell svnversion -n -c . | cut -d':' -f2)
+USING_VCPKG = 1
 
 BIN     = ./libserverkey.a
 
@@ -16,6 +17,12 @@ CFLAGS  = $(IFLAGS) -Wall -O2 -pipe -m32 -std=c++2a -D_THREAD_SAFE -fno-exceptio
 # IFLAGS = 
 # CFLAGS  = $(IFLAGS) -Wall -O2 -pipe -mcpu=i686 -D_THREAD_SAFE -fno-exceptions 
 # endif
+
+ifeq ($(USING_VCPKG), 1)
+CFLAGS += -m32
+VCPKG_DIR = /main/vcpkg
+IFLAGS = -I$(VCPKG_DIR)/installed/x86-freebsd/include
+endif
 
 LIBS =
 

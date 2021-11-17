@@ -11,6 +11,7 @@ GCC_VERSION = $(shell $(CC) --version 2>&1 | grep "(GCC)" | cut -d' ' -f3  | cut
 BSD_VERSION = $(shell uname -v 2>&1 | cut -d' ' -f2 | cut -d'.' -f1)
 SVN_VERSION = 40142
 $(shell if [ ! -d $(OBJDIR) ]; then mkdir $(OBJDIR); fi)
+USING_VCPKG = 1
 
 # TARGET = $(BINDIR)/db_r$(SVN_VERSION)
 TARGET = $(BINDIR)/db
@@ -23,20 +24,33 @@ else
 CFLAGS += -mtune=i686
 endif
 
+ifeq ($(USING_VCPKG), 0)
 # boost
 INCDIR += -I../../boost
+endif
 
 LIBDIR += -L../../libthecore/lib -L../../libsql -L../../libpoly -L../../libgame/lib
 
-ifeq ($(BSD_VERSION), 7)
-INCDIR += -I../../libmysql/7.x-5.1.35
-LIBDIR += -L../../libmysql/7.x-5.1.35
-else
-INCDIR += -I../../libmysql/5.x-5.1.35
-LIBDIR += -L../../libmysql/5.x-5.1.35
-endif
+#ifeq ($(BSD_VERSION), 7) #VCPKG
+#INCDIR += -I../../libmysql/7.x-5.1.35
+#LIBDIR += -L../../libmysql/7.x-5.1.35
+#else
+#INCDIR += -I../../libmysql/5.x-5.1.35
+#LIBDIR += -L../../libmysql/5.x-5.1.35
+#endif
 
-LIBS = -lthecore -lmysqlclient -lsql -lpoly -lgame -lm -lz
+LIBS = -lthecore -lsql -lpoly -lgame -lm -lz
+
+ifeq ($(USING_VCPKG), 0)
+LIBS += -lmysqlclient
+else
+CFLAGS += -m32 -static
+VCPKG_ROOT /main/vcpkg
+LIBS += -lmariadbclient -lssl -lcrypto -lz
+INCDIR += -I$(VCPKG_ROOT)/installed/x86-freebsd/include
+LIBDIR += -L$(VCPKG_ROOT)/installed/x86-freebsd/lib
+LIBDIR += -L/usr/local/lib/gcc10
+endif
 
 SRCS =	Config.cpp NetBase.cpp Peer.cpp PeerBase.cpp Main.cpp Lock.cpp DBManager.cpp \
 		Cache.cpp LoginData.cpp ClientManager.cpp ClientManagerPlayer.cpp ClientManagerLogin.cpp \

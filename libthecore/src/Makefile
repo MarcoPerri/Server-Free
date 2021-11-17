@@ -4,11 +4,18 @@ BIN     = $(BIN_DIR)/libthecore.a
 INCLUDE = ../include
 
 GCC_VERSION = $(shell $(CC) --version 2>&1 | grep "(GCC)" | cut -d' ' -f3  | cut -d'.' -f1)
+USING_VCPKG = 1
 
 ifeq ($(GCC_VERSION), 4)
 CFLAGS  = -Wall -O2 -pipe -mtune=i686 -g -I$(INCLUDE)
 else
 CFLAGS  = -Wall -O2 -pipe -mtune=i686 -g -I$(INCLUDE)
+endif
+
+ifeq ($(USING_VCPKG), 1)
+CFLAGS += -m32
+VCPKG_DIR = /main/vcpkg
+IFLAGS = -I$(VCPKG_DIR)/installed/x86-freebsd/include
 endif
 
 LIBS    = 
