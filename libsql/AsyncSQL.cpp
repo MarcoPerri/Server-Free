@@ -6,6 +6,7 @@
 #include <cstring>
 
 #include "AsyncSQL.h"
+#include "../common/service.h" //for VCPKG system
 
 // TODO: Consider providing platform-independent mutex class.
 #ifndef __WIN32__
@@ -143,7 +144,17 @@ bool CAsyncSQL::Connect()
 	if (0 != mysql_options(&m_hDB, MYSQL_OPT_RECONNECT, &reconnect))
 		fprintf(stderr, "mysql_option: %s\n", mysql_error(&m_hDB));
 
-	fprintf(stdout, "AsyncSQL: connected to %s (reconnect %d)\n", m_stHost.c_str(), m_hDB.reconnect);
+	fprintf(stdout, "AsyncSQL: connected to %s"
+		
+#ifndef VCPKG
+		" (reconnect %d)"
+#endif
+		
+		"\n", m_stHost.c_str()
+#ifndef VCPKG
+		, m_hDB.reconnect
+#endif
+	);
 
 	// db cache는 common db의 LOCALE 테이블에서 locale을 알아오고, 이후 character set을 수정한다.
 	// 따라서 최초 Connection을 맺을 때에는 locale을 모르기 때문에 character set을 정할 수가 없음에도 불구하고,

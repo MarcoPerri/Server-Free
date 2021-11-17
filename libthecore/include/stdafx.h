@@ -31,15 +31,18 @@
 
 #include "xdirent.h"
 #include "xgetopt.h"
+#include "../../common/service.h" //for VCPKG system
 
 #define S_ISDIR(m)	(m & _S_IFDIR)
 #define snprintf _snprintf
 
+#ifndef VCPKG
 struct timespec
 {
     time_t  tv_sec;         /* seconds */
     long    tv_nsec;        /* and nanoseconds */
 };
+#endif
 
 #define __USE_SELECT__
 
@@ -49,7 +52,9 @@ struct timespec
 #define strlcat(dst, src, size) strcat_s(dst, size, src)
 #define strlcpy(dst, src, size) strncpy_s(dst, size, src, _TRUNCATE)
 #define strtoull(str, endptr, base) _strtoui64(str, endptr, base)
+#ifndef VCPKG
 #define strtof(str, endptr) (float)strtod(str, endptr)
+#endif
 #define strcasecmp(s1, s2) stricmp(s1, s2)
 #define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
 #define atoll(str) _atoi64(str)

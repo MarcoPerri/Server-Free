@@ -1,5 +1,11 @@
 #ifndef __INC_METIN_II_MARKIMAGE_H__
 #define __INC_METIN_II_MARKIMAGE_H__
+#include "../common/service.h" //for VCPKG system
+
+#ifdef VCPKG
+#define IL_STATIC_LIB 1
+#endif
+
 
 #include <IL/il.h>
 #include "minilzo.h"

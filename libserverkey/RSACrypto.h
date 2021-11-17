@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <string>
+#include "../common/service.h" //for VCPKG system
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(VCPKG)
 // needed only for using openssl
 #pragma comment(lib, "libeay32")
 #endif

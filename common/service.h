@@ -9,5 +9,6 @@
 
 // V1
 //#define ENABLE_OLDHACKSHIELD // not supported anymore since 2015
+#define VCPKG
 
 #endif

@@ -4,6 +4,7 @@
 #ifdef _IMPROVED_PACKET_ENCRYPTION_
 
 #include <cryptopp/cryptlib.h>
+#include "../common/service.h" //for VCPKG system
 using CryptoPP::byte;
 // Forward declaration
 class KeyAgreement;
@@ -28,7 +29,15 @@ class Cipher {
     if (!activated_) {
       return;
     }
-    encoder_->ProcessData((byte*)buffer, (const byte*)buffer, length);
+    encoder_->ProcessData((
+#ifdef VCPKG
+        CryptoPP::
+#endif
+        byte*)buffer, (const 
+#ifdef VCPKG
+            CryptoPP::
+#endif
+            byte*)buffer, length);
   }
   // Decrypts the given block of data. (no padding required)
   void Decrypt(void* buffer, size_t length) {

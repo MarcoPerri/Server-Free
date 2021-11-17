@@ -258,6 +258,7 @@
     <ClCompile Include="sectree.cpp" />
     <ClCompile Include="sectree_manager.cpp" />
     <ClCompile Include="sequence.cpp" />
+    <ClCompile Include="sha1.c" />
     <ClCompile Include="shop.cpp" />
     <ClCompile Include="shopEx.cpp" />
     <ClCompile Include="shop_manager.cpp" />
@@ -394,6 +395,7 @@
     <ClInclude Include="sectree.h" />
     <ClInclude Include="sectree_manager.h" />
     <ClInclude Include="sequence.h" />
+    <ClInclude Include="sha1.h" />
     <ClInclude Include="shop.h" />
     <ClInclude Include="shopEx.h" />
     <ClInclude Include="shop_manager.h" />

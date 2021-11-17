@@ -6,6 +6,7 @@
  */
 #define __LIBTHECORE__
 #include "stdafx.h"
+#include "../../common/service.h" //for VCPKG system
 
 #ifndef __WIN32__
 #define SYSLOG_FILENAME "syslog"
@@ -211,7 +212,7 @@ void sys_log(unsigned int bit, const char *format, ...)
 		fflush(log_file_sys->fp);
 	}
 
-#ifndef __WIN32__
+#if !defined(__WIN32__) && !defined(VCPKG)
 	// log_level이 1 이상일 경우에는 테스트일 경우가 많으니 stdout에도 출력한다.
 	if (log_level_bits > 1)
 	{
@@ -224,7 +225,7 @@ void sys_log(unsigned int bit, const char *format, ...)
 
 		fputc('\n', stdout);
 		fflush(stdout);
-#ifndef __WIN32__
+#if  !defined(__WIN32__) && !defined(VCPKG)
 	}
 #endif
 }

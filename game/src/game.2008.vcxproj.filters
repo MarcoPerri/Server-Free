@@ -514,6 +514,9 @@
     <ClCompile Include="XTrapManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sha1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="affect.h">
@@ -931,6 +934,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="XTrapManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sha1.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

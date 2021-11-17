@@ -1,13 +1,13 @@
 #pragma once
 
 #include "SIM.h"
-#ifdef _WIN32
+#include "RSACrypto.h"
+#if defined(_WIN32) && !defined(VCPKG)
 #include <atlenc.h>
 #else
 #include "base64_ssl.h"
 #endif
 #include "PublicKey.Gen.h"
-#include "RSACrypto.h"
 
 using namespace Security;
 
@@ -38,7 +38,7 @@ static FORCEINLINE bool CheckServerKey(const char* serverKey, const char* ip, co
 	unsigned char buf[4096];
 	int buflen = sizeof(buf);
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(VCPKG)
 	if (FALSE == Base64Decode(key.c_str(), key.size(), buf, &buflen))
 	{
 		errorString = "base64 decode failed";

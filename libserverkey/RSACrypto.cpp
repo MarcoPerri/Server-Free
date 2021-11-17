@@ -1,5 +1,5 @@
 #include "RSACrypto.h"
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(VCPKG)
 #include <atlenc.h>
 #endif
 #include <assert.h>

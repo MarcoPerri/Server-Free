@@ -16,6 +16,7 @@
 #include "AuctionManager.h"
 #endif
 #include <signal.h>
+#include "../common/service.h" //for VCPKG system
 #undef __FreeBSD__
 void SetPlayerDBName(const char* c_pszPlayerDBName);
 void SetTablePostfix(const char* c_pszTablePostfix);
@@ -44,7 +45,7 @@ int g_log = 1;
 int g_iItemPriceListTableCacheFlushSeconds = 540;
 // END_OF_MYSHOP_PRICE_LIST
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) && !defined(VCPKG)
 extern const char * _malloc_options;
 #endif
 
@@ -65,7 +66,7 @@ int main()
 {
 	WriteVersion();
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) && !defined(VCPKG)
 	_malloc_options = "A";
 #endif
 

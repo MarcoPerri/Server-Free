@@ -3,11 +3,14 @@
 
 #include <string>
 #include <vector>
+#include "../common/service.h" //for VCPKG system
 
-#if _MSC_VER
+#if defined(_MSC_VER) && !defined(VCPKG)
     #include <hash_map>
-#else
+#elif !defined(VCPKG)
     #include <map>
+#elif defined(VCPKG)
+    #include <boost/unordered_map.hpp>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,12 +42,15 @@
 class cCsvAlias
 {
 private:
-#if _MSC_VER
+#if defined(_MSC_VER) && !defined(VCPKG)
     typedef stdext::hash_map<std::string, size_t> NAME2INDEX_MAP;
     typedef stdext::hash_map<size_t, std::string> INDEX2NAME_MAP;
-#else
+#elif !defined(VCPKG)
     typedef std::map<std::string, size_t> NAME2INDEX_MAP;
     typedef std::map<size_t, std::string> INDEX2NAME_MAP;
+#elif defined(VCPKG)
+    typedef boost::unordered_map<std::string, size_t> NAME2INDEX_MAP;
+    typedef boost::unordered_map<size_t, std::string> INDEX2NAME_MAP;
 #endif
 
     NAME2INDEX_MAP m_Name2Index;  ///< 셀 인덱스 대신으로 사용하기 위한 이름들
